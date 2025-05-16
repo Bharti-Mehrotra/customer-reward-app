@@ -34,30 +34,25 @@ const App = () => {
   }, [transactions, selectedCustomer, selectedMonth, selectedYear]);
 
   return (
-    <Container>
+    
       <Section>
         <Title>Customer Rewards Program</Title>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-
       {!loading && !error && (
-        <>
+      <Container>
           <CustomerList
             customers={customers}
             selectedCustomer={selectedCustomer}
             onSelect={setSelectedCustomer}
-          />
-          <MonthFilter
-            month={selectedMonth}
-            year={selectedYear}
-            onMonthChange={setSelectedMonth}
-            onYearChange={setSelectedYear}
           />
           {selectedCustomer && (
             <RewardSummary
               transactions={transactions.filter(tx => tx.customerId === selectedCustomer)}
               selectedMonth={selectedMonth}
               selectedYear={selectedYear}
+              onMonthChange={setSelectedMonth}
+              onYearChange={setSelectedYear}
             />
           )}
           {selectedCustomer && (
@@ -65,11 +60,10 @@ const App = () => {
               transactions={filteredTransactions}
             />
           )}
-        </>
+        </Container>
       )}
-                </Section>
+      </Section>
 
-    </Container>
   );
 };
 

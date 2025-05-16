@@ -1,25 +1,41 @@
 import { calculateRewardPoints } from '../calculateRewards';
 
 describe('calculateRewardPoints', () => {
-  test('returns 0 points for amounts <= 50', () => {
+  test('should return 0 points for amount <= 50', () => {
     expect(calculateRewardPoints(50)).toBe(0);
-    expect(calculateRewardPoints(30)).toBe(0);
+    expect(calculateRewardPoints(0)).toBe(0);
   });
 
-  test('returns 1 point per dollar between $50 and $100', () => {
-    expect(calculateRewardPoints(70)).toBe(20); // 70 => (70 - 50) * 1 = 20
-    expect(calculateRewardPoints(100)).toBe(50); // (100 - 50) * 1 = 50
+  test('should return correct points for amount between 51 and 100', () => {
+    expect(calculateRewardPoints(60)).toBe(10); // (60-50)*1
+    expect(calculateRewardPoints(100)).toBe(50); // (100-50)*1
   });
 
-  test('returns 2 points per dollar over $100 plus 1 point per dollar between $50-$100', () => {
-    expect(calculateRewardPoints(120)).toBe(90); 
-    // (120 - 100) * 2 = 40, (100 - 50) * 1 = 50 → 90 total
-    expect(calculateRewardPoints(130)).toBe(110); 
-    // (130 - 100) * 2 = 60, (100 - 50) * 1 = 50 → 110 total
+  test('should return correct points for amount > 100', () => {
+    expect(calculateRewardPoints(120)).toBe(90); // (20*2 + 50*1)
+    expect(calculateRewardPoints(130)).toBe(110); // (30*2 + 50*1)
   });
 
-  test('returns floor of total points if not a whole number', () => {
-    expect(calculateRewardPoints(120.5)).toBe(90); 
-    // Should still return whole number (points are floored)
+  test('should handle fractional amounts correctly', () => {
+    expect(calculateRewardPoints(99.99)).toBe(49); // (99.99 - 50) = 49.99 ≈ 49 points
+  });
+
+  test('should return 0 for negative amounts', () => {
+    expect(calculateRewardPoints(-20)).toBe(0);
+    expect(calculateRewardPoints(-100)).toBe(0);
+  });
+
+  test('should return 0 for non-numeric input (NaN)', () => {
+    expect(calculateRewardPoints(NaN)).toBe(0);
+  });
+
+  test('should return 0 for null or undefined input', () => {
+    expect(calculateRewardPoints(null)).toBe(0);
+    expect(calculateRewardPoints(undefined)).toBe(0);
+  });
+
+  test('should return 0 for string input', () => {
+    expect(calculateRewardPoints('')).toBe(0);
+    expect(calculateRewardPoints('abc')).toBe(0);
   });
 });

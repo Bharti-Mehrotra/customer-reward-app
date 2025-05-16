@@ -1,17 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { Section, Button, Title, CustomerButtonList, CustomerButton, Wrapper } from '../styles/styledComponents'
 const CustomerList = ({ customers, selectedCustomer, onSelect }) => {
   return (
-    <div>
-      <h2>Select Customer</h2>
-      <select value={selectedCustomer || ''} onChange={e => onSelect(e.target.value)}>
-        <option value='' disabled>Select...</option>
-        {customers.map(c => (
-          <option key={c.id} value={c.id}>{c.name}</option>
-        ))}
-      </select>
-    </div>
+
+    <Section>
+      <Title>Select Customer</Title>
+      <Wrapper>
+        <CustomerButtonList>
+          {customers.map(customer => (
+            <CustomerButton
+              key={customer.id}
+              onClick={() => onSelect(customer.id)}
+              disabled={selectedCustomer === customer.id}
+              selected={selectedCustomer === customer.id} 
+            >
+              {customer.name}
+            </CustomerButton>
+          ))}
+        </CustomerButtonList>
+      </Wrapper>
+
+    </Section>
   );
 };
 

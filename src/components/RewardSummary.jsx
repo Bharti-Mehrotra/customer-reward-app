@@ -2,18 +2,19 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { calculateRewardPoints } from '../utils/calculateRewards';
 import { recentThreeMonthsTransactions } from '../utils/recentThreeMonthsTransactions';
+import { RewardSummaryContainer } from './../styles/styledComponents';
+import MonthFilter from './MonthFilter';
 
-const RewardSummary = ({ transactions, selectedMonth, selectedYear }) => {
+const RewardSummary = ({ transactions, selectedMonth, selectedYear, onMonthChange, onYearChange }) => {
+
   const summary = useMemo(() => {
-    
-    // console.log("monthly transactions",transactions,selectedMonth,selectedYear)
-    if(selectedMonth === 'Recent 3 Months'){
+    if (selectedMonth === 'Recent 3 Months') {
       const recentMonthTransactions = recentThreeMonthsTransactions(transactions);
       return monthlyPoints(recentMonthTransactions)
     }
-    const monthlyTransactions = transactions.filter(tx=>{return (tx.date.startsWith(`${selectedYear}-${selectedMonth}`))})
+    const monthlyTransactions = transactions.filter(tx => { return (tx.date.startsWith(`${selectedYear}-${selectedMonth}`)) })
     return monthlyPoints(monthlyTransactions)
-  }, [transactions,selectedMonth, selectedYear]);
+  }, [transactions, selectedMonth, selectedYear]);
 
   function monthlyPoints(transactions) {
     const map = {}
@@ -31,7 +32,13 @@ const RewardSummary = ({ transactions, selectedMonth, selectedYear }) => {
   const total = Object.values(summary).reduce((sum, pts) => sum + pts, 0);
 
   return (
-    <div>
+    <RewardSummaryContainer>
+      <MonthFilter
+        month={selectedMonth}
+        year={selectedYear}
+        onMonthChange={onMonthChange}
+        onYearChange={onYearChange}
+      />
       <h2>Monthly Reward Summary</h2>
       <ul>
         {Object.entries(summary).map(([month, points]) => (
@@ -39,7 +46,7 @@ const RewardSummary = ({ transactions, selectedMonth, selectedYear }) => {
         ))}
       </ul>
       <p><strong>Total Points:</strong> {total}</p>
-    </div>
+    </RewardSummaryContainer>
   );
 };
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import transactions from '../data/mockTransactions.json';
 
 const useFetchTransactions = () => {
   const [data, setData] = useState([]);
@@ -9,7 +8,11 @@ const useFetchTransactions = () => {
   useEffect(() => {
     setTimeout(() => {
       if (Math.random() < 0.9) {
-        setData(transactions);
+        fetch('http://localhost:3001/data')
+         .then(res => res.json())
+         .then(data => {
+          console.log("data is ",data)
+          setData(data)});
         setError('');
       } else {
         setError('Failed to fetch data');
