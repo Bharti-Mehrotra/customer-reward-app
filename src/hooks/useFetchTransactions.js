@@ -6,19 +6,28 @@ const useFetchTransactions = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    setTimeout(() => {
-      if (Math.random() < 0.9) {
-        fetch('http://localhost:3001/data')
-         .then(res => res.json())
-         .then(data => {
-          console.log("data is ",data)
-          setData(data)});
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/data');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const result = await response.json();
+        if (!Array.isArray(result)) {
+          throw new Error('Unexpected data format. Expected an array.');
+        }
+        setData(result);
         setError('');
-      } else {
-        setError('Failed to fetch data');
+      } catch (err) {
+        console.error('Error fetching transactions:', err);
+        setError(err.message || 'Something went wrong');
+        setData([]);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }, 1000);
+    };
+fetchData()
   }, []);
 
   return { transactions: data, loading, error };

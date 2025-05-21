@@ -7,9 +7,10 @@ const CustomerList = ({ customers, selectedCustomer, onSelect }) => {
     <Section>
       <Title>Select Customer</Title>
       <Wrapper>
-        <CustomerButtonList>
+        <CustomerButtonList role='list'>
           {customers.map(customer => (
             <CustomerButton
+            role='listitem'
               key={customer.id}
               onClick={() => onSelect(customer.id)}
               disabled={selectedCustomer === customer.id}

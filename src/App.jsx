@@ -4,7 +4,7 @@ import CustomerList from './components/CustomerList';
 import MonthFilter from './components/MonthFilter';
 import RewardSummary from './components/RewardSummary';
 import TransactionTable from './components/TransactionTable';
-import { Container, Section, Title } from './styles/styledComponents';
+import { Container, Section, Title, Message } from './styles/styledComponents';
 import { getRecentThreeMonths } from './utils/recentThreeMonths';
 
 const App = () => {
@@ -21,49 +21,56 @@ const App = () => {
 
   const filteredTransactions = useMemo(() => {
     const recentMonths = getRecentThreeMonths();
-    console.log("val",selectedCustomer,selectedMonth,selectedYear,recentMonths,transactions)
-    return transactions.filter(tx =>{
-      if (selectedMonth === 'Recent 3 Months'){
+    return transactions.filter(tx => {
+      if (selectedMonth === 'Recent 3 Months') {
         return ((!selectedCustomer || tx.customerId === selectedCustomer) &&
-        recentMonths.includes(tx.date.slice(0,8)))
+          recentMonths.includes(tx.date.slice(0, 8)))
       }
-      else{
-      return ((!selectedCustomer || tx.customerId === selectedCustomer) &&
-        tx.date.startsWith(`${selectedYear}-${selectedMonth}`))}
+      else {
+        return ((!selectedCustomer || tx.customerId === selectedCustomer) &&
+          tx.date.startsWith(`${selectedYear}-${selectedMonth}`))
+      }
     });
   }, [transactions, selectedCustomer, selectedMonth, selectedYear]);
 
   return (
-    
-      <Section>
-        <Title>Customer Rewards Program</Title>
+
+    <Section>
+      <Title>Customer Rewards Program</Title>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!loading && !error && (
-      <Container>
+      {!loading && !error && customers.length ? (
+        <Container>
           <CustomerList
             customers={customers}
             selectedCustomer={selectedCustomer}
             onSelect={setSelectedCustomer}
           />
-          {selectedCustomer && (
-            <RewardSummary
-              transactions={transactions.filter(tx => tx.customerId === selectedCustomer)}
-              selectedMonth={selectedMonth}
-              selectedYear={selectedYear}
-              onMonthChange={setSelectedMonth}
-              onYearChange={setSelectedYear}
-            />
-          )}
-          {selectedCustomer && (
-            <TransactionTable
-              transactions={filteredTransactions}
-            />
-          )}
+          {selectedCustomer && customers ? (
+            <div style={{ display: 'contents' }}>
+              <RewardSummary
+                transactions={transactions.filter(tx => tx.customerId === selectedCustomer)}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
+                onMonthChange={setSelectedMonth}
+                onYearChange={setSelectedYear}
+              />
+              <TransactionTable
+                transactions={filteredTransactions}
+              />
+            </div>
+          )
+            : (
+              <Message>Please select a customer to view their rewards.</Message>
+            )}
         </Container>
-      )}
-      </Section>
-
+      )
+        :
+        (
+          <Message>No Customers Available.</Message>
+        )
+      }
+    </Section>
   );
 };
 

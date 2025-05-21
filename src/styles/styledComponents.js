@@ -84,11 +84,6 @@ export const Button = styled.button`
   }
 `;
 
-export const Message = styled.p`
-  font-style: italic;
-  color: #666;
-`;
-
 export const CustomerButtonList = styled.div`
   display: flex;
   flex-direction: column;
@@ -143,3 +138,12 @@ export const FilterSection = styled.div`
   margin-top: 1rem;
 `;
 
+export const Message = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #777;
+  height: 300px;
+`;

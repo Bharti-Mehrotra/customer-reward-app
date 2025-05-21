@@ -10,13 +10,13 @@ const RewardSummary = ({ transactions, selectedMonth, selectedYear, onMonthChang
   const summary = useMemo(() => {
     if (selectedMonth === 'Recent 3 Months') {
       const recentMonthTransactions = recentThreeMonthsTransactions(transactions);
-      return monthlyPoints(recentMonthTransactions)
+      return calculateMonthlyRewardPoints(recentMonthTransactions)
     }
     const monthlyTransactions = transactions.filter(tx => { return (tx.date.startsWith(`${selectedYear}-${selectedMonth}`)) })
-    return monthlyPoints(monthlyTransactions)
+    return calculateMonthlyRewardPoints(monthlyTransactions)
   }, [transactions, selectedMonth, selectedYear]);
 
-  function monthlyPoints(transactions) {
+  function calculateMonthlyRewardPoints(transactions) {
     const map = {}
     transactions.forEach(tx => {
       const [year, month] = tx.date.split('-'); //[2025,jan]

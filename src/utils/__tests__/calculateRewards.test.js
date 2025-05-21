@@ -7,17 +7,17 @@ describe('calculateRewardPoints', () => {
   });
 
   test('should return correct points for amount between 51 and 100', () => {
-    expect(calculateRewardPoints(60)).toBe(10); // (60-50)*1
-    expect(calculateRewardPoints(100)).toBe(50); // (100-50)*1
+    expect(calculateRewardPoints(60)).toBe(10);
+    expect(calculateRewardPoints(100)).toBe(50); 
   });
 
   test('should return correct points for amount > 100', () => {
-    expect(calculateRewardPoints(120)).toBe(90); // (20*2 + 50*1)
-    expect(calculateRewardPoints(130)).toBe(110); // (30*2 + 50*1)
+    expect(calculateRewardPoints(120)).toBe(90); 
+    expect(calculateRewardPoints(130)).toBe(110); 
   });
 
   test('should handle fractional amounts correctly', () => {
-    expect(calculateRewardPoints(99.99)).toBe(49); // (99.99 - 50) = 49.99 ≈ 49 points
+    expect(calculateRewardPoints(99.99)).toBe(49); 
   });
 
   test('should return 0 for negative amounts', () => {
